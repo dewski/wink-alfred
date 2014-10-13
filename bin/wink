@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "wink"
+require_relative "../wink/cli"
+
+Wink::CLI.start
