@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>dewski.wink</string>
+	<key>category</key>
+	<string>Tools</string>
+	<key>connections</key>
+	<dict>
+		<key>12C7F75A-8580-405C-8599-4A1151C1ECFE</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>6372D11C-D6B1-4FAD-875D-BEE49C80B48D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>4EC7FF93-5542-4D71-A144-4E77F0E74333</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>12C7F75A-8580-405C-8599-4A1151C1ECFE</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>80DD4EB5-B6F4-4F72-8C1A-168228143164</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>6372D11C-D6B1-4FAD-875D-BEE49C80B48D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>9F152B2C-5C64-4127-B5A4-0ADE58CF5E32</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E226812C-A2C7-45A8-8C63-85DD8011072A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>E226812C-A2C7-45A8-8C63-85DD8011072A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>6372D11C-D6B1-4FAD-875D-BEE49C80B48D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>EAC8280B-FCB0-4D28-A65E-6DA5EBF4BFCD</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>80DD4EB5-B6F4-4F72-8C1A-168228143164</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>dewski</string>
+	<key>description</key>
+	<string>Wink workflow</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Wink</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>wink devices</string>
+				<key>runningsubtext</key>
+				<string>Finding devices...</string>
+				<key>script</key>
+				<string>require "wink"
+
+Wink.configure do |wink|
+  wink.client_id     = "d87eee5fa89aae372aaeeeee356b67ec"
+  wink.client_secret = "c04abe86a9c23bb973d3b763a2b3865b"
+  wink.access_token  = "4a91e37b5642a8702284bc4829c46257"
+  wink.refresh_token = "d60f99d4f7a5bc7e0212c0a853401041"
+end
+
+client = Wink::Client.new
+items = []
+client.devices.compact.each do |device|
+  icon = case device
+    when Wink::Client::GarageDoor
+      'outdoor.png'
+    when Wink::Client::LightBulb, Wink::Client::BinarySwitch
+      'lamp.png'
+    when
+      'default.png'
+  end
+  item = &lt;&lt;-TEMPLATE
+&lt;item uid="#{device.id}" arg="#{device.id}" autocomplete="#{device.name}" type="file"&gt;
+  &lt;title&gt;#{device.name}&lt;/title&gt;
+  &lt;subtitle&gt;ON&lt;/subtitle&gt;
+  &lt;icon&gt;lamp.png&lt;/icon&gt;
+&lt;/item&gt;
+TEMPLATE
+
+  items &lt;&lt; item
+end
+
+puts "&lt;?xml version=\"1.0\"?&gt;&lt;items&gt;#{items.join}&lt;/items&gt;"</string>
+				<key>title</key>
+				<string>Find connected devices</string>
+				<key>type</key>
+				<integer>2</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>F54B849F-A6D1-4BA2-8416-EDD89DAE6796</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink garage doors</string>
+				<key>runningsubtext</key>
+				<string>Loading garage doors...</string>
+				<key>script</key>
+				<string>bin/wink garage-doors</string>
+				<key>title</key>
+				<string>Find all connected garage doors</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>A44CD6C7-12D2-4320-ACFA-4C1E04EECE8C</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink garage doors</string>
+				<key>runningsubtext</key>
+				<string>Loading garage door...</string>
+				<key>script</key>
+				<string>bin/wink garage-doors actions {query}</string>
+				<key>title</key>
+				<string>Control your garage doors</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>EAC8280B-FCB0-4D28-A65E-6DA5EBF4BFCD</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>bin/wink garage-doors {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>80DD4EB5-B6F4-4F72-8C1A-168228143164</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink switches</string>
+				<key>runningsubtext</key>
+				<string>Finding switches...</string>
+				<key>script</key>
+				<string>bin/wink binary-switches</string>
+				<key>title</key>
+				<string>Find connected switches</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>6F57D863-0B64-48E6-AB43-DFAD99293534</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Wink</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>6372D11C-D6B1-4FAD-875D-BEE49C80B48D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>bin/wink binary-switches {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>12C7F75A-8580-405C-8599-4A1151C1ECFE</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink switches</string>
+				<key>runningsubtext</key>
+				<string>Loading switch...</string>
+				<key>script</key>
+				<string>bin/wink binary-switches actions {query}</string>
+				<key>title</key>
+				<string>Control your switches</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>4EC7FF93-5542-4D71-A144-4E77F0E74333</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>bin/wink light-bulbs {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>E226812C-A2C7-45A8-8C63-85DD8011072A</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink light bulbs</string>
+				<key>runningsubtext</key>
+				<string>Loading light bulbs...</string>
+				<key>script</key>
+				<string>bin/wink light-bulbs</string>
+				<key>title</key>
+				<string>Find all connected light bulbs</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>CDE4CC15-ECE9-46A4-91C4-62B01E8F3C49</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>wink light bulbs</string>
+				<key>runningsubtext</key>
+				<string>Loading light bulb...</string>
+				<key>script</key>
+				<string>bin/wink light-bulbs actions {query}</string>
+				<key>title</key>
+				<string>Control your light bulb</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>9F152B2C-5C64-4127-B5A4-0ADE58CF5E32</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>12C7F75A-8580-405C-8599-4A1151C1ECFE</key>
+		<dict>
+			<key>ypos</key>
+			<real>570</real>
+		</dict>
+		<key>4EC7FF93-5542-4D71-A144-4E77F0E74333</key>
+		<dict>
+			<key>ypos</key>
+			<real>570</real>
+		</dict>
+		<key>6372D11C-D6B1-4FAD-875D-BEE49C80B48D</key>
+		<dict>
+			<key>ypos</key>
+			<real>490</real>
+		</dict>
+		<key>6F57D863-0B64-48E6-AB43-DFAD99293534</key>
+		<dict>
+			<key>ypos</key>
+			<real>460</real>
+		</dict>
+		<key>80DD4EB5-B6F4-4F72-8C1A-168228143164</key>
+		<dict>
+			<key>ypos</key>
+			<real>320</real>
+		</dict>
+		<key>9F152B2C-5C64-4127-B5A4-0ADE58CF5E32</key>
+		<dict>
+			<key>ypos</key>
+			<real>930</real>
+		</dict>
+		<key>A44CD6C7-12D2-4320-ACFA-4C1E04EECE8C</key>
+		<dict>
+			<key>ypos</key>
+			<real>210</real>
+		</dict>
+		<key>CDE4CC15-ECE9-46A4-91C4-62B01E8F3C49</key>
+		<dict>
+			<key>ypos</key>
+			<real>820</real>
+		</dict>
+		<key>E226812C-A2C7-45A8-8C63-85DD8011072A</key>
+		<dict>
+			<key>ypos</key>
+			<real>790</real>
+		</dict>
+		<key>EAC8280B-FCB0-4D28-A65E-6DA5EBF4BFCD</key>
+		<dict>
+			<key>ypos</key>
+			<real>320</real>
+		</dict>
+		<key>F54B849F-A6D1-4BA2-8416-EDD89DAE6796</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>https://github.com/dewski/wink.alfred</string>
+</dict>
+</plist>
